@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Store Interface</title>
+</head>
+
+<body>
+
+<h1>Store Dashboard</h1>
+
+
+<button type="button" onclick="loadProducts()">
+    View Products
+</button>
+
+<ul id="productList"></ul>
+
+
+<hr>
+
+
+<button type="button" onclick="loadOrder()">
+    View Order #101
+</button>
+
+<ul id="orderItems"></ul>
+
+<h3 id="orderTotal"></h3>
+
+
+<script>
+
+function loadProducts() {
+
+    console.log("Loading products...");
+
+    fetch("http://127.0.0.1:5000/products")
+
+        .then(response => response.json())
+
+        .then(products => {
+
+            const list = document.getElementById("productList");
+
+            list.innerHTML = "";
+
+            products.forEach(product => {
+
+                const li = document.createElement("li");
+
+                li.textContent =
+                    product.name + " - $" + product.price;
+
+                list.appendChild(li);
+
+            });
+
+        });
+
+}
+
+
+
+function loadOrder() {
+
+    console.log("Loading order...");
+
+    fetch("http://127.0.0.1:5000/orders/101")
+
+        .then(response => response.json())
+
+        .then(order => {
+
+            const list = document.getElementById("orderItems");
+
+            list.innerHTML = "";
+
+            order.items.forEach(item => {
+
+                const li = document.createElement("li");
+
+                li.textContent =
+                    item.product +
+                    " x " +
+                    item.quantity +
+                    " = $" +
+                    item.subtotal;
+
+                list.appendChild(li);
+
+            });
+
+            document.getElementById("orderTotal").textContent =
+                "Total: $" + order.total;
+
+        });
+
+}
+
+</script>
+
+</body>
+</html>
